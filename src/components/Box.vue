@@ -9,7 +9,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    name: 'Box-Modelo',
+    name: 'BoxItem',
     data() {
         return {
             estilos: {

@@ -23,7 +23,7 @@ import { defineComponent } from "vue";
 import Cronometro from "./Cronometro.vue";
 
 export default defineComponent({
-    name: "Temporizador-Modelo",
+    name: "TemporizadoR",
     emits: ['aoTemporizadorFinalizado'],
     data() {
         return {
