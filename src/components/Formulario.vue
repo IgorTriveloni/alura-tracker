@@ -2,36 +2,58 @@
 <template>
     <div class="box formulario">
         <div class="columns">
-            <div class="column is-8" role="form" aria-label="Formulário para criação de uma nova tarefa">
+            <div class="column is-5" role="form" aria-label="Formulário para criação de uma nova tarefa">
                 <input type="text" class="input" placeholder="Qual tarefa você deseja iniciar?" v-model="descricao" />
             </div>
+            <div class="column is-3">
+                <div class="select">
+                    <select v-model="idProjeto">
+                        <option value="">Selecione o projeto</option>
+                        <option :value="projeto.id" v-for="projeto in projetos" :key="projeto.id">{{ projeto.nome }}
+                        </option>
+                    </select>
+                </div>
+            </div>
             <div class="column">
-                <Temporizador @aoTemporizadorFinalizado="finalizarTarefa" />
+                <Temporizador @aoFinalizarTarefa="salvarTarefa" />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { key } from "@/store";
+import { computed, defineComponent, ref } from "vue";
+import { useStore } from "vuex";
 import Temporizador from "./Temporizador.vue";
 
 export default defineComponent({
     name: "FormulariO",
     emits: ['aoSalvarTarefa'],
     components: { Temporizador },
-    data() {
-        return {
-            descricao: ''
-        }
-    },
-    methods: {
-        finalizarTarefa(tempoDecorrido: number): void {
-            this.$emit('aoSalvarTarefa', {
+
+    setup(props, { emit }) {
+        const store = useStore(key);
+
+        const descricao = ref("");
+        const idProjeto = ref("");
+
+        const projetos = computed(() => store.state.projeto.projetos);
+
+        const salvarTarefa = (tempoDecorrido: number): void => {
+            emit('aoSalvarTarefa', {
                 duracaoEmSegundos: tempoDecorrido,
-                descricao: this.descricao
+                descricao: descricao.value,
+                projeto: projetos.value.find(proj => proj.id == idProjeto.value)
             })
-            this.descricao = ''; //remove a descricao depois do stop
+            descricao.value = ''; //remove a descricao depois do stop
+        }
+
+        return {
+            descricao,
+            idProjeto,
+            projetos,
+            salvarTarefa
         }
     }
 });

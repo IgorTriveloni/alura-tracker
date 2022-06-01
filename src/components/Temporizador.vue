@@ -2,14 +2,14 @@
     <div class="is-flex is-align-items-center is-justify-content-space-between">
         <Cronometro :tempoEmSegundos="tempoEmSegundos" />
         <!-- Botão start desabilitado se tiver o cronometro rodando -->
-        <button class="button" @click="iniciar" :disabled="cronometroRodando">
+        <button class="button is-primary" @click="iniciar" :disabled="cronometroRodando">
             <span class="icon">
                 <i class="fas fa-play"></i>
             </span>
             <span>play</span>
         </button>
         <!-- Botão stop desabilitado se não tiver o cronometro rodando -->
-        <button class="button" @click="finalizar" :disabled="!cronometroRodando">
+        <button class="button is-danger" @click="finalizar" :disabled="!cronometroRodando">
             <span class="icon">
                 <i class="fas fa-stop"></i>
             </span>
@@ -24,7 +24,7 @@ import Cronometro from "./Cronometro.vue";
 
 export default defineComponent({
     name: "TemporizadoR",
-    emits: ['aoTemporizadorFinalizado'],
+    emits: ['aoFinalizarTarefa'],
     data() {
         return {
             tempoEmSegundos: 0,
@@ -44,7 +44,7 @@ export default defineComponent({
         finalizar() {
             this.cronometroRodando = false;
             clearInterval(this.cronometro);
-            this.$emit('aoTemporizadorFinalizado', this.tempoEmSegundos);
+            this.$emit('aoFinalizarTarefa', this.tempoEmSegundos);
             this.tempoEmSegundos = 0; // cronometro zerado
         },
     },
